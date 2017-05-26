@@ -16,11 +16,41 @@ console.log("ready!");
 
 var database = firebase.database();
 
-var i = 0;
+
+console.log("i - "+i);
 var name = '';
 var destination = '';
 var firstStop = '';
 var frequency = '';
+var i = 0;
+
+function checki() {
+return firebase.database().ref('/count/').once('value').then(function(snapshot) {
+  var count = snapshot.val().i;
+  console.log(count);
+  i = count;
+  console.log('i - '+i);
+  // ...
+});
+}
+
+checki();
+
+
+
+//clear input text boxes
+
+function clear()
+{
+	$('#trainName').val('');
+	$('#destination').val('');
+	$('#firstStop').val('');
+	$('#frequency').val('');
+}
+
+
+
+// pushes form data to firebase database
 
 function writeUserData(i) {
   firebase.database().ref('/trains/'+i+'/').set({
@@ -29,26 +59,37 @@ function writeUserData(i) {
     firstStop : firstStop,
     frequency : frequency
   });
+
+
+  clear();
+
 }
 
 
+//when submit button is clicked, set form data to variabls and call writeUserData function
+
 $('#submitBtn').on('click', function () {
 
-event.preventDefault();
+	event.preventDefault();
 
-console.log('i - '+i);
+	console.log('i - '+i);
 
-name = $('#trainName').val().trim();
-destination = $('#destination').val().trim();
-firstStop = $('#firstStop').val().trim();
-frequency = $('#frequency').val().trim();
+	name = $('#trainName').val().trim();
+	destination = $('#destination').val().trim();
+	firstStop = $('#firstStop').val().trim();
+	frequency = $('#frequency').val().trim();
 
-writeUserData(i);
+	writeUserData(i);
 
-i++;
+	//updates the count
+	i++;
+
+	 firebase.database().ref('/count/').set({
+	    i: i,
+	  });
+
 
 });
-
 
 
 });
