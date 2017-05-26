@@ -16,22 +16,39 @@ console.log("ready!");
 
 var database = firebase.database();
 
+var i = 0;
+var name = '';
+var destination = '';
+var firstStop = '';
+var frequency = '';
 
 function writeUserData(i) {
-  firebase.database().ref('/trains/train'+i+'/').set({
-    trainName: "A Train",
-    destination: "email",
-    firstStop : "imageUrl",
-    frequency : i
+  firebase.database().ref('/trains/'+i+'/').set({
+    trainName: name,
+    destination: destination,
+    firstStop : firstStop,
+    frequency : frequency
   });
 }
 
 
-for (var i = 0 ; i < 5 ; i ++)
-{
+$('#submitBtn').on('click', function () {
+
+event.preventDefault();
+
+console.log('i - '+i);
+
+name = $('#trainName').val().trim();
+destination = $('#destination').val().trim();
+firstStop = $('#firstStop').val().trim();
+frequency = $('#frequency').val().trim();
 
 writeUserData(i);
 
-}
+i++;
+
+});
+
+
 
 });
