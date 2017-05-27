@@ -22,16 +22,37 @@ var name = '';
 var destination = '';
 var firstStop = '';
 var frequency = '';
+var nextTrain = '';
+var nextTrainFormatted = '';
+var minutesAway = '';
+var firstTimeConverted = '';
+var currentTime = '';
+var diffTime = '';
+var tRemainder = '';
+var minutesTillTrain = '';
+var keyHolder = '';
+var getKey = '';
+
+
+
 var i = 0;
 
 var now = moment();
+var then = moment();
 
 
 setInterval(function(){
 
 	now = moment()._d;
+	then = moment("11:44", "HH:mm").fromNow();
 
-	console.log(now);
+	if (then%frequency === 0 )
+	{
+
+	}
+
+	console.log(now+' - now');
+	console.log(then+' - then');
 	$('#currentTime').html(now);
 
 }, 1000);
@@ -47,8 +68,6 @@ return firebase.database().ref('/count/').once('value').then(function(snapshot) 
   console.log('i - '+i);
 
 
-
-
 		 for (var j = 0 ; j < i ; j++)
 		 {
 		 		function printExisting(){
@@ -59,6 +78,7 @@ return firebase.database().ref('/count/').once('value').then(function(snapshot) 
   					frequency = snapshot.val().frequency;
 
 		 			$('#trainRows').append("<tr><th scope='row'>"+name+"</th><td>"+destination+"</td><td>"+firstStop+"</td><td>"+frequency+"</td><td>Next Train!</td></tr>");
+
 
 		 			});
 		 		}
@@ -101,7 +121,9 @@ function writeUserData(i) {
     trainName: name,
     destination: destination,
     firstStop : firstStop,
-    frequency : frequency
+    frequency : frequency,
+    nextTrain : nextTrainFormatted,
+    minutesTill: minutesTillTrain
   });
 
 
@@ -122,6 +144,15 @@ $('#submitBtn').on('click', function () {
 	destination = $('#destination').val().trim();
 	firstStop = $('#firstStop').val().trim();
 	frequency = $('#frequency').val().trim();
+
+	    firstTimeConverted = moment(firstStop, "hh:mm").subtract(1, "years");
+        currentTime = moment();
+        diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+        tRemainder = diffTime % frequency;
+        minutesTillTrain = frequency - tRemainder;
+        nextTrain = moment().add(minutesTillTrain, "minutes");
+        nextTrainFormatted = moment(nextTrain).format("hh:mm");
+
 
 	writeUserData(i);
 
