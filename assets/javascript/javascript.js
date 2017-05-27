@@ -35,6 +35,8 @@ var getKey = '';
 
 
 
+
+
 var i = 0;
 
 var now = moment();
@@ -51,13 +53,33 @@ setInterval(function(){
 
 	}
 
-	console.log(now+' - now');
-	console.log(then+' - then');
+	
 	$('#currentTime').html(now);
 
 }, 1000);
 
 
+
+
+
+setInterval(function(){
+
+return firebase.database().ref('/count/').once('value').then(function(snapshot) {
+  var newCount = snapshot.val().i;
+  console.log(newCount);
+  
+  for (var f = 0 ; f < newCount ; f++)
+  {
+  	return firebase.database().ref('/trains/'+f).once('value').then(function(snapshot) {
+
+
+  		$('#'+i+'').html('');
+  	});
+  }
+
+
+});
+},6000);
 
 
 function checki() {
@@ -67,6 +89,7 @@ return firebase.database().ref('/count/').once('value').then(function(snapshot) 
   i = count;
   console.log('i - '+i);
 
+var x = 0;
 
 		 for (var j = 0 ; j < i ; j++)
 		 {
@@ -77,7 +100,12 @@ return firebase.database().ref('/count/').once('value').then(function(snapshot) 
   					firstStop = snapshot.val().firstStop;
   					frequency = snapshot.val().frequency;
 
-		 			$('#trainRows').append("<tr><th scope='row'>"+name+"</th><td>"+destination+"</td><td>"+firstStop+"</td><td>"+frequency+"</td><td>Next Train!</td></tr>");
+  					console.log(j + " - j");
+
+  				
+		 			$('#trainRows').append("<tr><th scope='row'>"+name+"</th><td>"+destination+"</td><td>"+firstStop+"</td><td id='freq'>"+frequency+"</td><td id='"+j+"'>Next Train!</td></tr>");
+		 			
+
 
 
 		 			});
@@ -110,7 +138,9 @@ function clear()
 
 function htmlChange ()
 {
-	$('#trainRows').append("<tr><th scope='row'>"+name+"</th><td>"+destination+"</td><td>"+firstStop+"</td><td>"+frequency+"</td><td>Next Train!</td></tr>");
+
+	$('#trainRows').append("<tr><th scope='row'>"+name+"</th><td>"+destination+"</td><td>"+firstStop+"</td><td id='freq'>"+frequency+"</td><td>Next Train!</td></tr>");
+	
 }
 
 
@@ -168,5 +198,6 @@ $('#submitBtn').on('click', function () {
 
 });
 
-
 });
+
+
