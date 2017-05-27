@@ -24,17 +24,54 @@ var firstStop = '';
 var frequency = '';
 var i = 0;
 
+var now = moment();
+
+
+setInterval(function(){
+
+	now = moment();
+
+}, 1000);
+
+
+
+
 function checki() {
 return firebase.database().ref('/count/').once('value').then(function(snapshot) {
   var count = snapshot.val().i;
   console.log(count);
   i = count;
   console.log('i - '+i);
+
+
+
+
+		 for (var j = 0 ; j < i ; j++)
+		 {
+		 		function printExisting(){
+		 			return firebase.database().ref('/trains/'+j).once('value').then(function(snapshot) {
+  					name = snapshot.val().trainName;
+  					destination = snapshot.val().destination;
+  					firstStop = snapshot.val().firstStop;
+  					frequency = snapshot.val().frequency;
+
+		 			$('#trainRows').append("<tr><th scope='row'>"+name+"</th><td>"+destination+"</td><td>"+firstStop+"</td><td>"+frequency+"</td><td>Next Train!</td></tr>");
+
+		 			});
+		 		}
+
+		 		printExisting();
+
+		 }
+
+		
   // ...
 });
 }
 
 checki();
+
+
 
 
 
@@ -48,6 +85,10 @@ function clear()
 	$('#frequency').val('');
 }
 
+function htmlChange ()
+{
+	$('#trainRows').append("<tr><th scope='row'>1</th><td>"+name+"</td><td>"+destination+"</td><td>"+firstStop+"</td><td>"+frequency+"</td></tr>");
+}
 
 
 // pushes form data to firebase database
@@ -80,6 +121,8 @@ $('#submitBtn').on('click', function () {
 	frequency = $('#frequency').val().trim();
 
 	writeUserData(i);
+
+	htmlChange();
 
 	//updates the count
 	i++;
