@@ -90,7 +90,7 @@ function clear()
 
 function htmlChange ()
 {
-	$('#trainRows').append("<tr><th scope='row'>1</th><td>"+name+"</td><td>"+destination+"</td><td>"+firstStop+"</td><td>"+frequency+"</td></tr>");
+	$('#trainRows').append("<tr><th scope='row'>"+name+"</th><td>"+destination+"</td><td>"+firstStop+"</td><td>"+frequency+"</td><td>Next Train!</td></tr>");
 }
 
 
