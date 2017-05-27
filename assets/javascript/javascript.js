@@ -29,7 +29,10 @@ var now = moment();
 
 setInterval(function(){
 
-	now = moment();
+	now = moment()._d;
+
+	console.log(now);
+	$('#currentTime').html(now);
 
 }, 1000);
 
